@@ -4,3 +4,6 @@
 
 ### 사용법
 - helm, kubectl 수정시 make unistall 하고 다시 make install 해줘야 함.
+
+### 참고
+- https://www.yes24.com/product/goods/142225740
