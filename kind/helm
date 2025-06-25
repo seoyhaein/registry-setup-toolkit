@@ -15,8 +15,8 @@ if [ ! -f "$KUBEDIR/config" ]; then
   echo "Proceeding without existing or valid config."
 fi
 
-# Pre-check: script identification
-echo "▶ $(basename "$0") v1.0.0 - wrapper script for helm"
+# Pre-check: script identification -bug- TODO 추후 수정한다.
+# echo "▶ $(basename "$0") v1.0.0 - wrapper script for helm"
 
 # Run helm in a container, passing all arguments ($@) directly to helm
 exec docker run --rm \
