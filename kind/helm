@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Wrapper script to run helm inside a container with proper kubeconfig mount
+
+# Directory containing host kubeconfig
+KUBEDIR="${HOME}/.kube"
+
+# Ensure .kube directory exists
+mkdir -p "$KUBEDIR"
+
+# Warn if kubeconfig file is missing
+if [ ! -f "$KUBEDIR/config" ]; then
+  echo "WARNING: kubeconfig not found at $KUBEDIR/config."
+  echo "Proceeding without existing or valid config."
+fi
+
+# Pre-check: script identification
+echo "▶ $(basename "$0") v1.0.0 - wrapper script for helm"
+
+# Run helm in a container, passing all arguments ($@) directly to helm
+exec docker run --rm \
+  --network host \
+  --user root \
+  -v "${KUBEDIR}:/root/.kube" \
+  -v "/opt/.kube:/opt/.kube" \
+  -v "$(pwd):/workdir" \
+  -v "${HOME}/.cache/helm:/root/.cache/helm" \
+  -v "${HOME}/.config/helm:/root/.config/helm" \
+  -e KUBECONFIG=/root/.kube/config \
+  -w /workdir \
+  lachlanevenson/k8s-helm:latest \
+  "$@"
